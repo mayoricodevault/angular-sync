@@ -16,12 +16,14 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     repoRequest = sync.get(repodetails, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 6000,
+        delay: 3000,
         autosolve: true
     });
     repoRequest.promise.then(null, null, function(data){
         //process
-        $rootScope.$broadcast("SyncRows", data);
+        var rowsdata = agGridRows.mapdata(data);
+        //console.log(rowsdata);
+        $rootScope.$broadcast("SyncRows", rowsdata);
     });
 
     var repoDefinition = $resource('http://healthcare.mojix.com:8080/riot-core-services/api/reportDefinition/3', {},{
@@ -35,31 +37,49 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     var repoDefRequest = sync.get(repoDefinition, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 6000,
+        delay: 3000,
         autosolve: true
     });
     repoDefRequest.promise.then(null, null, function(data){
         var newData = _.pick(data,'name','reportType','timeoutCache','autoRefreshInterval', 'reportProperty');
         cacheDef = store.get('def');
+        var coldefs = agGridColumns.mapdata(newData);
         if (_.isObject(cacheDef)) {
             var diff = objectDiff.diffOwnProperties(cacheDef, newData);
-            console.log(diff);
+            agGridRows.columnsMap(coldefs);
+            //console.log(diff);
             if (diff.changed != 'equal') {
-                $rootScope.$broadcast("SyncCols", newData);
+                //var coldefs = agGridColumns.mapdata(newData);
+                //agGridRows.columnsMap(coldefs);
+                $rootScope.$broadcast("SyncCols", coldefs);
+                //console.log('1------------->')
+                //console.log(coldefs);
                 store.set('def', newData);
-            } else{
-                $rootScope.$broadcast("SyncCols", cacheDef);
-            }
-        } else {
-            store.set('def', newData);
-            $rootScope.$broadcast("SyncCols", cacheDef);
+            } //else{
+            //    agGridRows.columnsMap(coldefs);
+            //    $rootScope.$broadcast("SyncCols", coldefs);
+            //}
+            //    var coldefs = agGridColumns.mapdata(newData);
+            //    agGridRows.columnsMap(coldefs);
+            //    $rootScope.$broadcast("SyncCols", coldefs);
+            //}
         }
+        // else {
+        //    store.set('def', newData);
+        //    var coldefs = agGridColumns.mapdata(cacheDef);
+        //    agGridRows.columnsMap(coldefs);
+        //    $rootScope.$broadcast("SyncCols", coldefs);
+        //}
     });
 
     dataServiceFactory.getColumns = function () {
         var deferred = $q.defer();
         cacheDef = store.get('def');
-        deferred.resolve(cacheDef);
+        if (_.isObject(cacheDef)) {
+            var coldefs = agGridColumns.mapdata(cacheDef);
+            agGridRows.columnsMap(coldefs);
+            deferred.resolve(coldefs);
+        }
         return deferred.promise;
     }
 

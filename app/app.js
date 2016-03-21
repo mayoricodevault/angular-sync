@@ -1,3 +1,4 @@
+agGrid.initialiseAgGridWithAngular1(angular);
 var app = angular.module("mvpapp", ['ngResource', 'ngRoute', 'datatables', 'vzx.sync','angular-storage']);
 
 app.config(function ($routeProvider) {
