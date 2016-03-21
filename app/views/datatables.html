@@ -1,0 +1,23 @@
+<p>
+    <button class="btn btn-primary" ng-click="stop()">Stop</button>
+    <button class="btn btn-primary" ng-click="restart()">Restart</button>
+    <button class="btn btn-primary" ng-click="faster()">Faster</button>
+    <button class="btn btn-primary" ng-click="slower()">Slower</button>
+</p>
+<!--<table datatable="" dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance" class="row-border hover responsive " width="100%"></table>-->
+<table class="table table-custom">
+    <thead>
+    <tr>
+        <th ng-repeat = "itemHead in reportTable.header">
+            {{itemHead.label}}
+        </th>
+    </tr>
+
+
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in reportTable.body">
+        <td ng-repeat="item in row">{{item}}</td>
+    </tr>
+    </tbody>
+</table>
