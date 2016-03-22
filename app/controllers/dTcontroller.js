@@ -17,13 +17,13 @@ app.controller('dTCntlr', ['$rootScope','$scope' ,'$resource','DTColumnBuilder',
         enableFilter: true,
         groupHeaders: true,
         rowHeight: 22,
-        enableColResize: true,
-        onGridReady: function() {
+        onGridReady: function(event) {
             gridOptions.api.addGlobalListener(function(type, event) {
                 if (type.indexOf('column') >= 0) {
                     console.log('Got column event: ' + event);
                 }
             });
+            event.api.sizeColumnsToFit();
         }
     };
 
@@ -53,8 +53,6 @@ app.controller('dTCntlr', ['$rootScope','$scope' ,'$resource','DTColumnBuilder',
             gridOptions.api.setRowData($scope.reportTable.body);
         }
     });
-
-
 
 
     $scope.ReRenderTable = function () {

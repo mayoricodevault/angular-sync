@@ -10,11 +10,19 @@
         VZXCOLDEFS,
         formatDate,
         validate,
+        cellRenderTest,
         columnsFactory;
     w.agGridColumns = w.agGridColumns || {};
     vzx = w.agGridColumns;
     NAME = 'Vizix - Column Factory for Ag-grid';
     PUBLISHED = new Date(2016, 3, 21);
+    cellRenderTest= function (params) {
+        if (params.value=='true') {
+            return 'truly';
+        } else {
+            return params.value;
+        }
+    }
     formatDate = function (d) {
         return '' + d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
     };
@@ -36,7 +44,15 @@
                 headerName : column.label,
                 field : column.propertyName,
                 colId : column.propertyName,
-                maxWidth: 50
+                cellStyle: function(params) {
+                    if (params.value=='true') {
+                        //mark police cells as red
+                        return {color: 'red', backgroundColor: 'green'};
+                    } else {
+                        return null;
+                    }
+                },
+                cellRenderer: cellRenderTest
                 //valueGetter: '(data.RegistrationComplete > 0) ? data[colDef.field] : ""'
 
         }
