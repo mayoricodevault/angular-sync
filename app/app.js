@@ -1,13 +1,28 @@
 agGrid.initialiseAgGridWithAngular1(angular);
-var app = angular.module("mvpapp", ['ngResource', 'ngRoute', 'datatables', 'vzx.sync','angular-storage']);
+var app = angular.module("mvpapp",
+    ['ngResource',
+        'ngRoute',
+        'datatables',
+        'vzx.sync',
+        'angular-storage',
+        'ngCookies',
+        'ngResource',
+        'ngSanitize',
+        'ngTouch',
+        'ui.bootstrap',
+        'reportTableDirective'
+    ]);
 
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/dt', {
             templateUrl: "app/views/datatables.html",
             controller: "dTCntlr"
-        })
-        .otherwise({
+        }).
+        when('/rt', {
+            templateUrl: "app/views/viewReport.html",
+            controller: "rTCntlr"
+        }).otherwise({
             redirectTo: "/dt"
         });
 });

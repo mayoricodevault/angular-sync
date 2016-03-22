@@ -1,0 +1,165 @@
+<div class="panel panel-primary">
+    <!--AdminTable Heading-->
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {{config.title}}
+      <span class="pull-right hidden-xs">
+      {{'SHOWING' | translator}} <b ng-if="totalRows > rowsPerPage">{{rowsPerPage}}</b><b ng-if="!(totalRows > rowsPerPage)">{{totalRows}}</b> / {{'TOTAL' | translator}} <b>{{totalRows}}</b>
+      -
+      {{'CURRENT_PAGE' | translator}} : <b>{{currentPage}}</b>
+      </span>
+        </h3>
+    </div>
+    <!-- AdminTable Control Navigations-->
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <button
+                        type="button"
+                        ng-if="config.actions && config.actions.add && !config.actions.add.form.opened"
+                        ng-click="config.actions.add.form.opened=true;"
+                        class="btn btn-danger btn-sm">
+                    {{ 'NEW' | translator }} <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button
+                        type="button"
+                        ng-if="config.actions && config.actions.add && config.actions.add.form.opened"
+                        ng-click="config.actions.add.form.opened=false;"
+                        class="btn btn-sm btn-warning">
+                    {{ 'CANCEL' | translator }} <span class="glyphicon glyphicon-remove"></span>
+                </button>
+
+                <div
+                        ng-show="!config.actions || !config.actions.add || !config.actions.add.form.opened"
+                        class="btn-group">
+                    <a class="dropdown-toggle btn btn-warning btn-sm" data-toggle="dropdown" href="">
+                        {{'HIDE_COLUMNS' | translator}}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu drop-down-menu-check-list" role="menu">
+                        <li ng-repeat="col in config.cols track by $index">
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="col.hidden">
+                                {{col.label}}
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group btn-sm pull-right">
+                    <button
+                            ng-repeat="opt in config.rowsPerPageOptions"
+                            type="button"
+                            title="{{'SHOW_NUM_ROWS_PER_PAGE' | translator:({'numRows' : opt})}}"
+                            class="btn btn-default btn-sm"
+                            ng-class="{'active' : rowsPerPage === opt}"
+                            ng-click="setLimitLength(opt)">
+                        {{opt}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Body - Main content-->
+    <div class="panel-body admin-table-body-wrapper">
+        <div class="admin-table-body">
+            <!--Alert Error Field-->
+            <div class="well well-bg" ng-if="errors.length > 0">
+                <div class="alert alert-danger alert-dismissible" role="alert" ng-repeat="error in errors">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <strong>{{error}}</strong>
+                </div>
+            </div>
+            <div ng-if="!config.actions || !config.actions.add || !config.actions.add.form.opened">
+                <form class="table-responsive" name="adminTableEditRowForm">
+                    <div class="admin-table-wrapper">
+                        <!--Modeview Table-->
+                        <table id="admin-table" ng-show="modeView === 'table'" class="table table-bordered table-striped table-hover admin-table" ng-if="rows.length > 0">
+                            <thead>
+                            <tr>
+                                <th ng-repeat="colHeading in config.cols track by $index"
+                                    ng-show="!colHeading.hidden"
+                                    width="{{colHeading.width}}">
+                                    <div admin-table-drop="true"
+                                         admin-table-drop-success="onReorderColsCompleted($index, $data, $event)"
+                                         class="th">
+                                        <a  title="{{'DRAG_DROP_TO_REORDER' | translator}}"
+                                                href=""
+                                                admin-table-drag="true"
+                                                admin-table-drag-data="colHeading">
+                                            {{colHeading.label}}
+                                        </a>
+                                          <span
+                                                  class="sort-col-up"
+                                                  title="{{'SORT_BY_ASC' | translator:(colHeading)}}"
+                                                  ng-click="setOrder(colHeading.model, 'ASC')"
+                                                  ng-if="colHeading.sortable"
+                                                  ng-class="{'active' : requestData.order.orderBy === colHeading.model && requestData.order.order === 'ASC'}">
+                                            <small>&#9650;</small>
+                                          </span>
+                                          <span
+                                                  class="sort-col-down"
+                                                  title="{{'SORT_BY_DESC' | translator:(colHeading)}}"
+                                                  ng-click="setOrder(colHeading.model, 'DESC')"
+                                                  ng-if="colHeading.sortable"
+                                                  ng-class="{'active' : requestData.order.orderBy === colHeading.model && requestData.order.order === 'DESC'}">
+                                            <small>&#9660;</small>
+                                          </span>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in rows" >
+                                <td
+                                        ng-repeat="col in config.cols track by $index"
+                                        ng-show="!col.hidden"
+                                        align="{{col.align}}">
+                                              {{row[col.model]}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div ng-if="rows.length === 0" class="alert alert-danger" role="alert">
+                            <h4>{{ 'NO_RECORDS_FOUND' | translator }}</h4>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="btn-group pull-right">
+                    <button
+                            type="button"
+                            class="btn btn-default btn-sm"
+                            ng-if="paging.prev"
+                            title="{{'GO_TO_PAGE' | translator}} {{page}}"
+                            ng-click="setPage(paging.prev)">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-default btn-sm"
+                            title="{{'GO_TO_PAGE' | translator}} {{page}}"
+                            ng-repeat="page in paging.pages"
+                            ng-class="{'active' : page === currentPage}"
+                            ng-click="setPage(page)">
+                        {{page}}
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-default btn-sm"
+                            ng-if="paging.next"
+                            title="{{'GO_TO_PAGE' | translator}} {{paging.next}}"
+                            ng-click="setPage(paging.next)">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

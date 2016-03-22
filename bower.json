@@ -24,6 +24,8 @@
     "datatables-responsive": "^2.0.2",
     "underscore": "^1.8.3",
     "a0-angular-storage": "^0.0.13",
-    "ag-grid": "^4.0.4"
+    "ag-grid": "^4.0.4",
+    "angular-bootstrap": "^1.2.5",
+    "angular-material": "^1.0.6"
   }
 }

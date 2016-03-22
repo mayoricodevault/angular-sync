@@ -33,6 +33,7 @@
         return isValid;
     };
     columnsFactory = function () {
+        var testFunc = eval("(function (params) {if (params.value=='true'){return 'truly';} else {return params.value;}})");
         if (!validate(VZXCOLDEFS)) {
             return new Error('Fatal! Cannot support that kind of data in Tables..!!.');
         }
@@ -44,6 +45,7 @@
                 headerName : column.label,
                 field : column.propertyName,
                 colId : column.propertyName,
+                width: 90,
                 cellStyle: function(params) {
                     if (params.value=='true') {
                         //mark police cells as red
@@ -52,7 +54,7 @@
                         return null;
                     }
                 },
-                cellRenderer: cellRenderTest
+                cellRenderer: testFunc
                 //valueGetter: '(data.RegistrationComplete > 0) ? data[colDef.field] : ""'
 
         }
