@@ -16,14 +16,14 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     repoRequest = sync.get(repodetails, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 3000,
+        delay: 20000,
         autosolve: true
     });
     repoRequest.promise.then(null, null, function(data){
         //process
-        var rowsdata = agGridRows.mapdata(data);
+
         //console.log(rowsdata);
-        $rootScope.$broadcast("SyncRows", rowsdata);
+        $rootScope.$broadcast("SyncRows", data);
     });
 
     var repoDefinition = $resource('http://healthcare.mojix.com:8080/riot-core-services/api/reportDefinition/3', {},{
@@ -37,51 +37,13 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     var repoDefRequest = sync.get(repoDefinition, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 3000,
+        delay: 30000,
         autosolve: true
     });
     repoDefRequest.promise.then(null, null, function(data){
         var newData = _.pick(data,'name','reportType','timeoutCache','autoRefreshInterval', 'reportProperty');
-        cacheDef = store.get('def');
-        var coldefs = agGridColumns.mapdata(newData);
-        if (_.isObject(cacheDef)) {
-            var diff = objectDiff.diffOwnProperties(cacheDef, newData);
-            agGridRows.columnsMap(coldefs);
-            //console.log(diff);
-            if (diff.changed != 'equal') {
-                //var coldefs = agGridColumns.mapdata(newData);
-                //agGridRows.columnsMap(coldefs);
-                $rootScope.$broadcast("SyncCols", coldefs);
-                //console.log('1------------->')
-                //console.log(coldefs);
-                store.set('def', newData);
-            } //else{
-            //    agGridRows.columnsMap(coldefs);
-            //    $rootScope.$broadcast("SyncCols", coldefs);
-            //}
-            //    var coldefs = agGridColumns.mapdata(newData);
-            //    agGridRows.columnsMap(coldefs);
-            //    $rootScope.$broadcast("SyncCols", coldefs);
-            //}
-        }
-        // else {
-        //    store.set('def', newData);
-        //    var coldefs = agGridColumns.mapdata(cacheDef);
-        //    agGridRows.columnsMap(coldefs);
-        //    $rootScope.$broadcast("SyncCols", coldefs);
-        //}
+        $rootScope.$broadcast("SyncCols", newData);
     });
-
-    dataServiceFactory.getColumns = function () {
-        var deferred = $q.defer();
-        cacheDef = store.get('def');
-        if (_.isObject(cacheDef)) {
-            var coldefs = agGridColumns.mapdata(cacheDef);
-            agGridRows.columnsMap(coldefs);
-            deferred.resolve(coldefs);
-        }
-        return deferred.promise;
-    }
 
     dataServiceFactory.stop = function () {
         repoRequest.stop();
@@ -124,7 +86,16 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     //
     //    return deferred.promise;
     //}
-
+    //dataServiceFactory.getColumns = function () {
+    //    var deferred = $q.defer();
+    //    cacheDef = store.get('def');
+    //    if (_.isObject(cacheDef)) {
+    //        var coldefs = agGridColumns.mapdata(cacheDef);
+    //        agGridRows.columnsMap(coldefs);
+    //        deferred.resolve(coldefs);
+    //    }
+    //    return deferred.promise;
+    //}
     return dataServiceFactory;
 }
 ]);

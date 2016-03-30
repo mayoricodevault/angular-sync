@@ -26,6 +26,8 @@
     "a0-angular-storage": "^0.0.13",
     "ag-grid": "^4.0.4",
     "angular-bootstrap": "^1.2.5",
-    "angular-material": "^1.0.6"
+    "angular-material": "^1.0.6",
+    "vaadin-grid": "^1.0.0",
+    "handsontable": "^0.24.1"
   }
 }

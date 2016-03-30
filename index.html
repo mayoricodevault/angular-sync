@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css" rel="stylesheet">
+
     <!--<link rel="stylesheet" type="text/css" href="app/styles/main.css"/>-->
 
     <link rel="stylesheet" type="text/css" href="bower_components/ag-grid/dist/styles/ag-grid.css" />
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
     <link rel="stylesheet" href="app/styles/reportTable.css" />
-    <!--<link rel="stylesheet" type="text/css" href="bower_components/ag-grid/dist/styles/theme-blue.css" />-->
+    <link rel="stylesheet" href="app/styles/jsoneditor.css" />
+
+  <!--<link rel="stylesheet" type="text/css" href="bower_components/ag-grid/dist/styles/theme-blue.css" />-->
     <!--<link rel="stylesheet" type="text/css" href="theme-material.css" />-->
 
     <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
@@ -43,16 +46,23 @@
     <script type="text/javascript" src="app/table-export/tableExport.js"></script>
     <script type="text/javascript" src="app/table-export/jquery.base64.js"></script>
     <script src="angular-persistent-request.js"></script>
+    <script src="app/jquery-ui.js"></script>
     <script src="objectDiff.js"></script>
     <script src="app/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="app/sortable.js"></script>
+
     <script src="app/services/dynamicTables.js"></script>
+    <script src="app/services/jsonEditor.js"></script>
     <script src="app/app.js"></script>
     <script src="app/services/datatableService.js"></script>
-    <script src="app/controllers/dTcontroller.js"></script>
-    <script src="app/controllers/rTcontroller.js"></script>
+    <!--<script src="app/controllers/dTcontroller.js"></script>-->
+    <!--<script src="app/controllers/rTcontroller.js"></script>-->
+    <script src="app/controllers/jTcontroller.js"></script>
+    <script src="vzxReportFactory.js"></script>
+    <script src="dtVzxFactory.js"></script>
 
-    <script src="columnFactory.js"></script>
-    <script src="rowFactory.js"></script>
+    <!--<script src="columnsFactory.js"></script>-->
+    <!--<script src="rowFactory.js"></script>-->
 
 </body>
 

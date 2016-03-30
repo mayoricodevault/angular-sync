@@ -10,20 +10,28 @@ var app = angular.module("mvpapp",
         'ngSanitize',
         'ngTouch',
         'ui.bootstrap',
-        'reportTableDirective'
+        'ui.sortable',
+        'reportTableDirective',
+        'jsoneditorDirective'
     ]);
+
 
 app.config(function ($routeProvider) {
     $routeProvider
-        .when('/dt', {
-            templateUrl: "app/views/datatables.html",
-            controller: "dTCntlr"
-        }).
-        when('/rt', {
-            templateUrl: "app/views/viewReport.html",
-            controller: "rTCntlr"
-        }).otherwise({
-            redirectTo: "/dt"
+        //.when('/dt', {
+        //    templateUrl: "app/views/datatables.html",
+        //    controller: "dTCntlr"
+        //}).
+        //when('/rt', {
+        //    templateUrl: "app/views/viewReport.html",
+        //    controller: "rTCntlr"
+        //}).
+        .when('/jt', {
+            templateUrl: "app/views/jsonEditor.html",
+            controller: "jTCntlr"
+        })
+        .otherwise({
+            redirectTo: "/jt"
         });
 });
 app.constant('_',

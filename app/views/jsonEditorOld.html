@@ -1,0 +1,70 @@
+<div class="header">
+    <h3 class="text-muted">JSON Editor</h3>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Editor</h2>
+        <hr>
+        <jsoneditor ng-model="test1"></jsoneditor>
+    </div>
+    <div class="col-md-6">
+        <h2>Edit and Submit Ajax</h2>
+        <hr>
+        <jsoneditor ng-model="test" json-submit-config="submitConfig"></jsoneditor>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <h2>View-only Mode</h2>
+        <hr>
+        <jsoneditor ng-model="test2" view-only="true"></jsoneditor>
+    </div>
+    <div class="col-md-6">
+        <h2>Check JSON valid format</h2>
+        <hr>
+        <jsoneditor ng-model="test3" view-only="true"></jsoneditor>
+    </div>
+</div>
+<br>
+<div class="row">
+    <h2>As A New Form Element</h2>
+    <hr>
+    <div class="col-md-6">
+        <form class="form-horizontal" role="form" name='loginForm' novalidate ng-submit="submitForm();">
+            <div class="form-group">
+                <label class="control-label col-sm-2">Email:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model='formTest.userName' required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Password:</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control"  ng-model='formTest.password' required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Schools:</label>
+                <div class="col-sm-10">
+                    <jsoneditor ng-model="formTest.schools" requi       <jseditor>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Extras:</label>
+                <div class="col-sm-10">
+                    <jsoneditor ng-model="formTest.extraData" required></jsoneditor>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-danger" ng-disabled="loginForm.$invalid">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <pre>{{formTest | json}}</pre>
+    </div>
+</div>

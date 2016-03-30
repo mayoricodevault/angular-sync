@@ -1,0 +1,404 @@
+<script type="text/ng-template"  id="jsoneditor_form_table.html">
+    <td
+            ng-if="isObjectAndArray(dataParent[key])"
+            ng-init="elementIndex=getElementIndex();";
+            ng-class="{'jsoneditor-td-children' : !isRoot}">
+        <table class="jsoneditor-table">
+            <tr>
+                <td ng-init="dataParentType=getType(dataParent);">
+                    <a
+                            ng-click="hiddenElements[elementIndex]=false;"
+                            ng-if="hiddenElements[elementIndex]"
+                            title="Open children"
+                            class="jsoneditor-table-nounderline"
+                            href="">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                    <a
+                            ng-click="hiddenElements[elementIndex]=true;"
+                            ng-if="!hiddenElements[elementIndex]"
+                            title="Open children"
+                            class="jsoneditor-table-nounderline"
+                            href="">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </a>
+                    <b class="jsoneditor-array-element-index" ng-if="dataParentType==='Array'">{{key}}.</b>
+                    <input
+                            ng-if="dataParentType!=='Array'"
+                            class="form-control input-xs jsoneditor-table-input jsoneditor-table-input-key"
+                            ng-model="newKey"
+                            ng-init="newKey=key;"
+
+                            ng-blur="changeObjectKey(dataParent, key, newKey);">
+                    <i> - {{getType(dataParent[key])}} [{{getLength(dataParent[key])}}]</i>
+                </td>
+                <td>
+					<span class="pull-right">
+						<a
+                                title="Drag-Drop to re-order elements of Array"
+                                ng-if="dataParentType==='Array' && dataParent.length > 1"
+                                class="btn btn-xs btn-default jsoneditor-table-sortable-btn">
+                            <span class="glyphicon glyphicon-sort"></span>
+                        </a>
+						<div class="dropdown jsoneditor-table-dropdown-config">
+                            <a class="btn btn-xs btn-info dropdown-toggle" title="Insert New Property"  data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li title="Add new child with type Number">
+                                    <a href="" ng-click="addField(dataParent, key, 'Number', elementIndex);">Number</a>
+                                </li>
+                                <li title="Add new child with type Boolean">
+                                    <a href="" ng-click="addField(dataParent, key, 'Boolean', elementIndex);">Boolean</a>
+                                </li>
+                                <li title="Add new child with type String">
+                                    <a href="" ng-click="addField(dataParent, key, 'String', elementIndex);">String</a>
+                                </li>
+                                <li title="Add new child with type Array">
+                                    <a href="" ng-click="addField(dataParent, key, 'Array', elementIndex);">Array</a>
+                                </li>
+                                <li title="Add new child with type Object">
+                                    <a href="" ng-click="addField(dataParent, key, 'Object', elementIndex);">Object</a>
+                                </li>
+                                <li title="Add new child with type Null">
+                                    <a href="" ng-click="addField(dataParent, key, 'Null', elementIndex);">Null</a>
+                                </li>
+                            </ul>
+                        </div>
+						<a
+                                title="Remove this property"
+                                class="btn btn-xs btn-danger jsoneditor-table-nounderline"
+                                href=""
+                                ng-click="deleteField(dataParent, key);">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+					</span>
+                </td>
+            </tr>
+        </table>
+        <table
+                class="jsoneditor-table"
+                ng-if="getType(dataParent[key])==='Array'"
+                ng-init="dataOld=dataParent[key];">
+            <tbody ui-sortable="sortableConfig" ng-model="dataOld">
+            <tr
+                    class="jsoneditor-table-sortable-row"
+                    ng-show="!hiddenElements[elementIndex]"
+                    ng-include="'jsoneditor_form_table.html'"
+                    ng-repeat="(key,data) in dataOld track by $index"
+                    ng-init="dataParent=dataOld;isRoot=0;"></tr>
+            </tbody>
+        </table>
+        <table
+                class="jsoneditor-table"
+                ng-if="getType(dataParent[key])==='Object'"
+                ng-init="dataOld=dataParent[key];">
+            <tr
+                    ng-show="!hiddenElements[elementIndex]"
+                    ng-include="'jsoneditor_form_table.html'"
+                    ng-repeat="(key,data) in dataOld track by $index"
+                    ng-init="dataParent=dataOld;isRoot=0;"></tr>
+        </table>
+    </td>
+    <td
+            ng-class="{'jsoneditor-td-children' : !isRoot}"
+            class="jsoneditor-not-array-object"
+            ng-if="!isObjectAndArray(dataParent[key])"
+            ng-init="elementIndex=getElementIndex(dataParent[key]);oldVal=dataParent[key];";>
+        <table
+                class="jsoneditor-table"
+                ng-init="dataType=getType(dataParent[key]);dataParentType=getType(dataParent);">
+            <tr>
+                <td class="jsoneditor-data-col" ng-if="dataParentType!=='Array'">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="input-group">
+                                <input
+                                        class="form-control input-xs jsoneditor-table-input-key"
+                                        ng-model="newKey"
+                                        ng-init="newKey=key;"
+                                        ng-blur="changeObjectKey(dataParent, key, newKey);">
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <div class="input-group">
+                                <select
+                                        ng-if="getType(dataParent[key])==='Boolean'"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        class="form-control jsoneditor-table-select-input"
+                                        ng-model="dataParent[key]"
+                                        ng-options="boolean for boolean in booleanArrays"></select>
+                                <input
+                                        ng-if="getType(dataParent[key])==='String'"
+                                        title="{{dataParent[key]}}"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        ng-model="dataParent[key]"
+                                        type="text"
+                                        class="form-control input-xs jsoneditor-table-input-val">
+                                <input
+                                        ng-if="getType(dataParent[key])==='Number'"
+                                        title="{{dataParent[key]}}"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        ng-model="dataParent[key]"
+                                        type="number"
+                                        jsoneditor-input-number-validator
+                                        class="form-control input-xs jsoneditor-table-input-val">
+                                <input
+                                        ng-disabled="true"
+                                        class="form-control input-xs jsoneditor-table-input-val"
+                                        value="Null"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        title="{{dataParent[key]}}"
+                                        ng-if="getType(dataParent[key])==='Null'">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{getType(dataParent[key])}} <span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'String');">String</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Boolean');">Boolean</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Number');">Number</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Null');">Null</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="jsoneditor-data-col" ng-if="dataParentType==='Array'">
+                    <div class="row">
+                        <h4 class="col-xs-1 jsoneditor-array-element-index">
+                            {{key}}.
+                        </h4>
+                        <div class="col-xs-11">
+                            <div class="input-group">
+                                <select
+                                        ng-if="getType(dataParent[key])==='Boolean'"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        class="form-control jsoneditor-table-select-input"
+                                        ng-model="dataParent[key]"
+                                        ng-options="boolean for boolean in booleanArrays"></select>
+                                <input
+                                        ng-if="getType(dataParent[key])==='String'"
+                                        title="{{dataParent[key]}}"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        ng-model="dataParent[key]"
+                                        type="text"
+                                        class="form-control input-xs jsoneditor-table-input-val">
+                                <input
+                                        ng-if="getType(dataParent[key])==='Number'"
+                                        title="{{dataParent[key]}}"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        ng-model="dataParent[key]"
+                                        type="number"
+                                        jsoneditor-input-number-validator
+                                        class="form-control input-xs jsoneditor-table-input-val">
+                                <input
+                                        ng-disabled="true"
+                                        class="form-control input-xs jsoneditor-table-input-val"
+                                        value="Null"
+                                        ng-class="getClassTextColor(dataParent[key])"
+                                        title="{{dataParent[key]}}"
+                                        ng-if="getType(dataParent[key])==='Null'">
+                                <div class="input-group-btn">
+                                    <button
+                                            type="button"
+                                            class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-expanded="false">
+                                        {{getType(dataParent[key])}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'String')">String</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Boolean')">Boolean</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Number')">Number</a></li>
+                                        <li><a href="" ng-click="changeFieldType(dataParent, key, 'Null')">Null</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="jsoneditor-config-col">
+					<span class="pull-right">
+						<a
+                                title="Drag-Drop to re-order elements of Array"
+                                ng-if="dataParentType==='Array' && dataParent.length > 1"
+                                class="btn btn-xs btn-default jsoneditor-table-sortable-btn">
+                            <span class="glyphicon glyphicon-sort"></span>
+                        </a>
+						<a
+                                title="Remove this property"
+                                class="btn btn-xs btn-danger jsoneditor-table-nounderline"
+                                href=""
+                                ng-click="deleteField(dataParent, key);">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+					</span>
+                </td>
+            </tr>
+        </table>
+    </td>
+</script>
+<div class="input-group">
+    <input
+            id="{{$id}}"
+            title="{{jsonString}}"
+            ng-model="ngModel"
+            ng-disabled="true"
+            ng-click="showJsonEditor=true;"
+            class="form-control">
+  	<span class="input-group-btn">
+  		<button
+                title="Error JSON Format"
+                class="btn btn-danger"
+                type="button"
+                ng-if="jsonError">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+        </button>
+  		<button
+                title="Click to view json"
+                class="btn btn-primary"
+                type="button"
+                ng-disabled="jsonError"
+                ng-click="openModalViewer();">
+            <span class="glyphicon glyphicon-eye-open"></span>
+        </button>
+    	<button
+                ng-if="!viewOnly"
+                title="Click to edit json"
+                class="btn btn-warning"
+                type="button"
+                ng-disabled="jsonError"
+                ng-click="openModalEditor();">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+  	</span>
+</div>
+<div  ng-class="{'opened-modal-wrapper': openedModalViewer }" class="jsoneditor-modal-wrapper jsoneditor-modal-viewer-wrapper" id="jsoneditor-modal-viewer-wrapper-{{$id}}">
+    <div ng-class="{'opened-modal': openedModalViewer }" class="jsoneditor-modal jsoneditor-modal-viewer" id="jsoneditor-modal-viewer-{{$id}}">
+        <div class="jsoneditor-modal-content">
+            <div class="jsoneditor-modal-body">
+                <div class="panel panel-default jsoneditor-modal-panel" class="jsoneditor">
+                    <div class="panel-heading" >
+				  		<span>
+				  			<span class="pull-right">
+						  		<a class="btn btn-xs btn-danger" ng-click="closeModalViewer()" title="Close">
+                                    <span class="glyphicon glyphicon-remove"></span> Exit
+                                </a>
+				  			</span>
+				  			<b>JsonViewer - {{getType(json)}} [{{getLength(json)}}]</b>
+				  		</span>
+                    </div>
+                    <div class="panel-body jsoneditor-modal-panel-body">
+                        <pre>{{json | json}}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="!viewOnly" ng-class="{'opened-modal-wrapper': openedModalEditor }" class="jsoneditor-modal-wrapper" id="jsoneditor-modal-wrapper-{{$id}}">
+    <div  ng-class="{'opened-modal': openedModalEditor }" class="jsoneditor-modal" id="jsoneditor-modal-{{$id}}">
+        <div class="jsoneditor-modal-content">
+            <div class="jsoneditor-modal-body">
+                <div class="panel panel-default jsoneditor-modal-panel" class="jsoneditor">
+                    <div class="panel-heading" >
+				  		<span>
+				  			<b>JsonEditor - {{getType(json)}} [{{getLength(json)}}]</b>
+				  			<span class="pull-right">
+				  				<span ng-show="showErrorText">
+				  					<a href="" ng-click="quitError()" class="text-danger">
+                                        <small>
+                                            <i class="glyphicon glyphicon-warning-sign"></i>
+                                            <b>Error please click here</b>
+                                        </small>
+                                    </a>
+				  				</span>
+				  				<span ng-show="showLoadingText"><small><i><b>Loading...</b></i></small></span>
+				  				<span ng-show="showSavingText"><small><i><b>Saving...</b></i></small></span>
+				  				<a
+                                        class="btn btn-xs btn-default"
+                                        title="Go Back 1 step"
+                                        ng-click="stepBack();"
+                                        ng-disabled="!currentStep">
+                                    <span class="glyphicon glyphicon-arrow-left"></span> Back
+                                </a>
+					  			<a
+                                        class="btn btn-xs btn-default"
+                                        title="Go Next 1 step"
+                                        ng-click="stepNext();"
+                                        ng-disabled="currentStep>(steps.length-2)">
+                                    <span class="glyphicon glyphicon-arrow-right"></span> Next
+                                </a>
+					  			<div class="dropdown jsoneditor-table-dropdown-config">
+                                    <a class="btn btn-xs btn-info dropdown-toggle" title="Insert New Property"  data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                        <span class="caret"></span> Insert
+                                    </a>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li title="Add new child with type Number">
+                                            <a href="" ng-click="addFieldToRoot('Number');">Number</a>
+                                        </li>
+                                        <li title="Add new child with type Boolean">
+                                            <a href="" ng-click="addFieldToRoot('Boolean');">Boolean</a>
+                                        </li>
+                                        <li title="Add new child with type String">
+                                            <a href="" ng-click="addFieldToRoot('String');">String</a>
+                                        </li>
+                                        <li title="Add new child with type Array">
+                                            <a href="" ng-click="addFieldToRoot('Array');">Array</a>
+                                        </li>
+                                        <li title="Add new child with type Object">
+                                            <a href="" ng-click="addFieldToRoot('Object');">Object</a>
+                                        </li>
+                                        <li title="Add new child with type Null">
+                                            <a href="" ng-click="addFieldToRoot('Null');">Null</a>
+                                        </li>
+                                    </ul>
+                                </div>
+							  	<a class="btn btn-xs btn-warning" ng-click="saveStep()" title="Save">
+                                    <span class="glyphicon glyphicon-floppy-saved"></span> Save
+                                </a>
+					  			<a ng-if="!jsonSubmitConfig" class="btn btn-xs btn-success" ng-click="saveJson()" title="Close">
+                                    <span class="glyphicon glyphicon-ok"></span> Save and Close
+                                </a>
+							  	<a ng-if="jsonSubmitConfig" class="btn btn-xs btn-success" ng-click="submitJson()" title="Close">
+                                    <span class="glyphicon glyphicon-ok"></span> Submit
+                                </a>
+					  			<a class="btn btn-xs btn-danger" ng-click="saveJson()" title="Exit">
+                                    <span class="glyphicon glyphicon-remove"></span> Exit
+                                </a>
+				  			</span>
+				  		</span>
+                    </div>
+                    <div class="panel-body jsoneditor-modal-panel-body jsoneditor-table-body-wrapper">
+                        <div class="row">
+                            <div class="col-xs-12" ng-init="dataType=getType(json);">
+                                <table ng-if="dataType==='Object'" class="jsoneditor-table">
+                                    <tbody>
+                                    <tr
+                                            ng-include="'jsoneditor_form_table.html'"
+                                            ng-repeat="(key,data) in json track by $index"
+                                            ng-init="dataParent=json;isRoot=1;"></tr>
+                                    </tbody>
+                                </table>
+                                <table ng-if="dataType==='Array'" class="jsoneditor-table">
+                                    <tbody ui-sortable="sortableConfig" ng-model="json">
+                                    <tr
+                                            class="jsoneditor-table-sortable-row"
+                                            ng-include="'jsoneditor_form_table.html'"
+                                            ng-repeat="(key,data) in json track by $index"
+                                            ng-init="dataParent=json;isRoot=1;"></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div ng-show="showLoadingText||showSavingText||showErrorText" class="jsoneditor-table-loading-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

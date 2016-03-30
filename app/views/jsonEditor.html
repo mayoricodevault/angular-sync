@@ -1,0 +1,68 @@
+<style>
+    .bg-progressTable-alt {
+        height: 100%;
+        padding: 0; }
+    .bg-na {
+        background-color: #DAD5D5;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <jsoneditor ng-model="_ReportDefinition" json-submit-config="submitConfig"></jsoneditor>
+    </div>
+</div>
+
+
+<table  id="demo1" class="table table-bordered table-striped table-hover admin-table" >
+    <!--HEADER SECCION-->
+    <thead>
+    <tr>
+
+
+        <th ng-repeat="colHeading in dtColumnDefs track by $index"
+
+            width="{{colHeading.width}}">
+            <div admin-table-drop="true"
+                 class="th">
+                <a  title="{{'DRAG_DROP_TO_REORDER' | translator}}"
+                    href=""
+                    admin-table-drag="true"
+                    admin-table-drag-data="colHeading">
+                    {{colHeading.headerName}}
+                </a>
+              <span
+                      class="sort-col-up"
+                      title="{{'SORT_BY_ASC' | translator:(colHeading)}}"
+                      ng-click="setOrder(colHeading.model, 'ASC')"
+                      ng-if="colHeading.sortable"
+                      ng-class="{'active' : requestData.order.orderBy === colHeading.model && requestData.order.order === 'ASC'}">
+                <small>&#9650;</small>
+              </span>
+              <span
+                      class="sort-col-down"
+                      title="{{'SORT_BY_DESC' | translator:(colHeading)}}"
+                      ng-click="setOrder(colHeading.model, 'DESC')"
+                      ng-if="colHeading.sortable"
+                      ng-class="{'active' : requestData.order.orderBy === colHeading.model && requestData.order.order === 'DESC'}">
+                <small>&#9660;</small>
+              </span>
+            </div>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="key in dtInstance track by $index"  ng-init="rowNumbr=$index">
+        <td
+                ng-repeat="col in dtColumnDefs track by $index"
+                ng-show="!col.hidden"
+                align="{{col.align}}"
+                ng-class="{{col.ngClass}}">
+                {{key[col.model]}}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div ng-if="rows.length === 0" class="alert alert-danger" role="alert">
+    <h4>{{ 'NO_RECORsDS_FOUND'}}</h4>
+</div>

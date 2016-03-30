@@ -13,8 +13,8 @@
         validate,
         rowsFactory,
         findByLabel;
-    w.dtRowsFactory = w.dtRowsFactory || {};
-    vzx = w.dtRowsFactory;
+    w.agGridRows = w.agGridRows || {};
+    vzx = w.agGridRows;
     NAME = 'Vizix - Rows Factory for Ag-grid';
     PUBLISHED = new Date(2016, 3, 21);
     formatDate = function (d) {
@@ -28,7 +28,7 @@
     };
     findByLabel = function(labelKey) {
         var obj = _.find(VZXCOLDEFS, function(item) {
-            return item.label === labelKey;
+            return item.headerName === labelKey;
         });
         return obj;
     };
@@ -37,13 +37,14 @@
             return new Error('Fatal! Cannot support that kind of data in Tables..!!.');
         }
        var rowsDefs=[];
+            //console.dir(VZXROWDEFS);
         var vzxRowDefs = _.pick(VZXROWDEFS,'results');
         vzxRowDefs.results.forEach(function(row){
             var  rowObjs = {};
             for (var i in row) {
                 var colDefObj = findByLabel(i);
                 if (colDefObj) {
-                    var colname = colDefObj.propertyName;
+                    var colname = colDefObj.field;
                     var colvalue = row[i];
                     rowObjs[colname] = colvalue;
                 }
@@ -53,8 +54,7 @@
         return rowsDefs;
     };
     vzx.columnsMap = function(coldefs) {
-        //console.dir(_.pick(coldefs,'reportProperty').reportProperty);
-        VZXCOLDEFS = _.pick(coldefs,'reportProperty').reportProperty;
+        VZXCOLDEFS = coldefs;
     };
     vzx.mapdata = function (rowdefs) {
         VZXROWDEFS = JSON.parse(JSON.stringify(rowdefs));
