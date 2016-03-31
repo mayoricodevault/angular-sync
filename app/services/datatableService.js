@@ -16,7 +16,7 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     repoRequest = sync.get(repodetails, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 20000,
+        delay: 2000,
         autosolve: true
     });
     repoRequest.promise.then(null, null, function(data){
@@ -37,7 +37,7 @@ app.factory('datatableService', ['$rootScope', '$q',  'sync', '$resource','_','o
     var repoDefRequest = sync.get(repoDefinition, {
         action: 'getData',
         argumentsArray: [{}],
-        delay: 30000,
+        delay: 6000,
         autosolve: true
     });
     repoDefRequest.promise.then(null, null, function(data){

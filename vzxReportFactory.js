@@ -1,100 +1,188 @@
+/**
+ * Created by mike.mayori on 3/21/16.
+ */
+if(typeof(jQuery)=='undefined'){
+  window.alert("jQuery not defined");
+}
+if(typeof(_)=='undefined'){
+  window.alert("Underscore not defined");
+}
 (function (w, _, $) {
   'use strict';
   var VZXREPORTDEFINITION = [
-  {
-    "report" : 3,
-    "cols" :[
-      {
-        "propertyName" : "WorkflowTypes",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "name",
-        "ngClass" :"{'bg-na': key.ExamComplete && key.ExamStart}"
-      },
-      {
-        "propertyName" : "AbbreviationFN",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "PhysicianName",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "TreatmentTypes",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "zone",
-        "ngClass" :"{'bg-na': key.ExamComplete && key.ExamStart}"
-      },
-      {
-        "propertyName" : "RegistrationComplete",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "WaitingStart",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "WaitingComplete",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "TreatmentRoomValue",
-        "ngClass" :"{'bg-na': key.ExamComplete && key.ExamStart}"
-      },
-      {
-        "propertyName" : "TreatmentStart",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "TreatmentComplete",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" :"WaitingExamStart",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" :"WaitingExamComplete",
-        "ngClass" :"{'bg-na': key.ExamComplete && key.ExamStart}"
-      },
-      {
-        "propertyName" : "ExamRoomValue",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "ExamStart",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "ExamComplete",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "LOS",
-        "ngClass" :"default"
-      },
-      {
-        "propertyName" : "dwellTime( LOS )",
-        "ngClass" :"default"
-      }
-    ],
-    "groups" :[{
-        "title" : "Example",
-        "groupName" : "headerOne",
-        "subHeader" : [
-          {
-            "propertyName"  : "WorkflowTypes"
+        {
+          "report" : 3,
+          "datatable": {
+              "search" : true,
+              "pagination" : true,
+              "pagesize" : 10,
+              "fullscreen" : true,
+              "startpage" : 0
           },
-          {
-            "propertyName" : "AbbreviationFN"
-          }
-        ]
-    }]
-   }
-  ],
+          "mask" : {
+            "DATE"    : "dd/mm/yy",
+            "TIMESTAMP"    : "hh:mm a",
+            "DATETIME"     : "dd/mm/yy hh:mm",
+            "RELATIVETIME"   : "hh:mm:ss",
+            "NUMBER" : "number:0",
+            "FLOAT" : "number:2",
+            "CURRENCY" : "'USD$':0"
+          },
+          "cols" :[
+            {
+              "propertyName" : "WorkflowTypes",
+              "ngClass" :"{'icon-doctor': key[col.model].value == 'Consult', 'icon-health-2': key[col.model].value == 'Treatment'}",
+            },
+            {
+              "propertyName" : "name",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "AbbreviationFN",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "PhysicianName",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "TreatmentTypes",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "zone",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "RegistrationComplete",
+              "ngClass" :"{'bg-progressTable-alt':key.RegistrationComplete.value, 'bg-na': (key.WaitingStart.value || WaitingComplete.value || key.TreatmentRoomValue.value || key.TreatmentStart.value || key.TreatmentComplete.value || key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.RegistrationComplete.value}"
+            },
+            {
+              "propertyName" : "WaitingStart",
+              "ngClass" : "{'bg-progressTable-alt':key.WaitingStart.value,'bg-na': (WaitingComplete.value || key.TreatmentRoomValue.value || key.TreatmentStart.value || key.TreatmentComplete.value || key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.WaitingStart.value}"
+            },
+            {
+              "propertyName" : "WaitingComplete",
+              "ngClass" :"{'bg-progressTable-alt':key.WaitingComplete.value,'bg-na': (key.TreatmentRoomValue.value || key.TreatmentStart.value || key.TreatmentComplete.value || key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.WaitingComplete.value}"
+            },
+            {
+              "propertyName" : "TreatmentRoomValue",
+              "ngClass" :"{'bg-progressTable-alt':key.TreatmentRoomValue.value,'bg-na': (key.TreatmentStart.value || key.TreatmentComplete.value || key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.TreatmentRoomValue.value}"
+            },
+            {
+              "propertyName" : "TreatmentStart",
+              "ngClass" :"{'bg-progressTable-alt':key.TreatmentStart.value,'bg-na': (key.TreatmentComplete.value || key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.TreatmentStart.value}"
+            },
+            {
+              "propertyName" : "TreatmentComplete",
+              "ngClass" :"{'bg-progressTable-alt':key.TreatmentComplete.value,'bg-na': (key.WaitingExamStart.value || key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.TreatmentComplete.value}"
+            },
+            {
+              "propertyName" :"WaitingExamStart",
+              "ngClass" : "{'bg-progressTable-alt':key.WaitingExamStart.value,'bg-na': (key.WaitingExamComplete.value || key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.WaitingExamStart.value}"
+            },
+            {
+              "propertyName" :"WaitingExamComplete",
+              "ngClass" : "{'bg-progressTable-alt':key.WaitingExamComplete.value, 'bg-na': (key.ExamRoomValue.value || key.ExamStart.value || key.ExamComplete.value) && !key.WaitingExamComplete.value}"
+            },
+            {
+              "propertyName" : "ExamRoomValue",
+              "ngClass" : "{'bg-progressTable-alt':key.ExamRoomValue.value,'bg-na': (key.ExamStart.value || key.ExamComplete.value) && !key.ExamRoom.value}"
+
+            },
+            {
+              "propertyName" : "ExamStart",
+              "ngClass" :"{'bg-progressTable-alt':key.ExamStart.value,'bg-na': key.ExamComplete.value && !key.ExamStart.value}"
+            },
+            {
+              "propertyName" : "ExamComplete",
+              "ngClass" :"{'bg-progressTable-alt':key.ExamComplete.value && key.ExamComplete.value !='0'}"
+            },
+            {
+              "propertyName" : "LOS",
+              "ngClass" :"default"
+            },
+            {
+              "propertyName" : "dwellTime( LOS )",
+              "ngClass" :"default",
+              "type" : "RELATIVETIME"
+            }
+          ],
+          "groups" :[{
+            "title" : "Registration",
+            "groupName" : "RegistrationStage",
+            "subHeader" : [
+              {
+                "propertyName"  : "RegistrationComplete",
+                "label" : "Complete"
+              }
+            ]},
+            {
+              "title" : "Waiting",
+              "groupName" : "WaitingStage",
+              "subHeader" : [
+                {
+                  "propertyName"  : "WaitingStart",
+                  "label" : "Start"
+                },
+                {
+                  "propertyName"  : "WaitingComplete",
+                  "label" : "Complete"
+                }
+              ]},
+            {
+              "title" : "Treatment",
+              "groupName" : "TreatmentStage",
+              "subHeader" : [
+                {
+                  "propertyName"  : "TreatmentRoomValue",
+                  "label" : "Room"
+                },
+                {
+                  "propertyName"  : "TreatmentStart",
+                  "label" : "Start"
+                },
+                {
+                  "propertyName"  : "TreatmentComplete",
+                  "label" : "Complete"
+                }
+              ]
+            },
+            {
+              "title" : "Waiting Exam",
+              "groupName" : "WaitingExamStage",
+              "subHeader" : [
+                {
+                  "propertyName"  : "WaitingExamStart",
+                  "label" : "Start"
+                },
+                {
+                  "propertyName"  : "WaitingExamComplete",
+                  "label" : "Complete"
+                }
+              ]
+            },
+            {
+              "title" : "Exam",
+              "groupName" : "ExamStage",
+              "subHeader" : [
+                {
+                  "propertyName"  : "ExamRoomValue",
+                  "label" : "Room"
+                },
+                {
+                  "propertyName"  : "ExamStart",
+                  "label" : "Start"
+                },
+                {
+                  "propertyName"  : "ExamComplete",
+                  "label" : "Complete"
+                }
+              ]
+            }
+          ]
+        }
+      ],
       VZXDATATYPEDEF =[
         {
           "id":0,
@@ -239,7 +327,9 @@
       getReportDefinition,
       getColumnDefinition,
       getGroupsDefinition,
-      getColumnGroupDefinition;
+      getColumnGroupDefinition,
+      getMaskDefinition,
+      getDtDefinition;
 
   w.VzxReportFactory = w.VzxReportFactory || {};
   vzx = w.VzxReportFactory;
@@ -260,6 +350,18 @@
     });
     return _.pick(obj, 'groups');
   };
+  getDtDefinition = function(idKey) {
+    var obj = _.find(VZXREPORTDEFINITION, function(item) {
+      return item.report === idKey;
+    });
+    return _.pick(obj, 'datatable');
+  };
+  getMaskDefinition = function(idKey) {
+    var obj = _.find(VZXREPORTDEFINITION, function(item) {
+      return item.report === idKey;
+    });
+    return _.pick(obj, 'mask');
+  };
   getColumnGroupDefinition = function(colKey) {
     return  _.find(VZXGROUPSDEFS.groups, function(group) {
       return  _.find(group.subHeader, function(item) {
@@ -273,6 +375,12 @@
       return item.propertyName === colKey;
     });
     return obj;
+  };
+  vzx.dtMapMasks = function(reportID) {
+    if (!_.isNumber(reportID)) return '';
+    VZXREPODEFS = getReportDefinition(reportID);
+    if (!_.isObject(VZXREPODEFS)) return '';
+    return getMaskDefinition(reportID);
   };
   vzx.dtMapDataTypeByID = function(idKey) {
     var obj = _.find(VZXDATATYPEDEF, function(item) {
@@ -294,6 +402,12 @@
     if (!_.isObject(VZXREPODEFS)) return [];
     VZXGROUPSDEFS = getGroupsDefinition(reportID);
     return getColumnGroupDefinition(colDef);
+  };
+  vzx.dtMapDataTablesDef = function (reportID) {
+    if (!_.isNumber(reportID)) return {};
+    VZXREPODEFS = getReportDefinition(reportID);
+    if (!_.isObject(VZXREPODEFS)) return {};
+    return getDtDefinition(reportID).datatable;
   };
   vzx.getVersionInfo = function () {
     return '' + NAME + ' - ' + VERSION + ' (' + formatDate(PUBLISHED) + ')';

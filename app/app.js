@@ -1,4 +1,3 @@
-agGrid.initialiseAgGridWithAngular1(angular);
 var app = angular.module("mvpapp",
     ['ngResource',
         'ngRoute',
@@ -12,22 +11,12 @@ var app = angular.module("mvpapp",
         'ui.bootstrap',
         'ui.sortable',
         'reportTableDirective',
-        'jsoneditorDirective'
     ]);
-
 
 app.config(function ($routeProvider) {
     $routeProvider
-        //.when('/dt', {
-        //    templateUrl: "app/views/datatables.html",
-        //    controller: "dTCntlr"
-        //}).
-        //when('/rt', {
-        //    templateUrl: "app/views/viewReport.html",
-        //    controller: "rTCntlr"
-        //}).
         .when('/jt', {
-            templateUrl: "app/views/jsonEditor.html",
+            templateUrl: "app/views/dynamicReport.html",
             controller: "jTCntlr"
         })
         .otherwise({

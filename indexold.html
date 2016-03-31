@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/505bef35b56/integration/bootstrap/3/dataTables.bootstrap.css">
 
@@ -37,6 +39,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-animate.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-touch.min.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/ag-grid/dist/ag-grid.js?ignore=notused19"></script>
     <script type="text/javascript" src="app/table-export/tableExport.js"></script>
     <script type="text/javascript" src="app/table-export/jquery.base64.js"></script>
     <script src="angular-persistent-request.js"></script>
@@ -46,11 +49,18 @@
     <script src="app/sortable.js"></script>
 
     <script src="app/services/dynamicTables.js"></script>
+    <script src="app/services/jsonEditor.js"></script>
     <script src="app/app.js"></script>
     <script src="app/services/datatableService.js"></script>
+    <!--<script src="app/controllers/dTcontroller.js"></script>-->
+    <!--<script src="app/controllers/rTcontroller.js"></script>-->
     <script src="app/controllers/jTcontroller.js"></script>
     <script src="vzxReportFactory.js"></script>
     <script src="dtVzxFactory.js"></script>
+
+    <!--<script src="columnsFactory.js"></script>-->
+    <!--<script src="rowFactory.js"></script>-->
+
 </body>
 
 </html>
